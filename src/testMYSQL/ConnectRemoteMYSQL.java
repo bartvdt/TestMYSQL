@@ -74,7 +74,7 @@ public class ConnectRemoteMYSQL {
 	private static void executeStatement(String strQRCode)
 	{
 		//String strQRCode = "TEST_CSV_Q1";
-		System.out.println("excecuteStatement("+strQRCode+")");
+		System.out.println("ExcecuteStatement("+strQRCode+")");
 		try {
 			dbConnection.setAutoCommit(false);
 			
