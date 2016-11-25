@@ -7,8 +7,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-//import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,7 +51,6 @@ public class ConnectRemoteMYSQL {
 			dbConnection = DriverManager.getConnection(dbUrl, connectionProperties);
 		} catch(SQLException e)
 		{
-			//e.printStackTrace();
 			System.out.println("No connection: " + e.getMessage());
 			System.exit(0);
 		}
@@ -73,7 +70,6 @@ public class ConnectRemoteMYSQL {
 	
 	private static void executeStatement(String strQRCode)
 	{
-		//String strQRCode = "TEST_CSV_Q1";
 		System.out.println("ExcecuteStatement("+strQRCode+")");
 		try {
 			dbConnection.setAutoCommit(false);
