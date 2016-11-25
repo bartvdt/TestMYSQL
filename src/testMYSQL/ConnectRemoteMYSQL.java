@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+//import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -74,7 +74,7 @@ public class ConnectRemoteMYSQL {
 	private static void executeStatement(String strQRCode)
 	{
 		//String strQRCode = "TEST_CSV_Q1";
-		System.out.println("excecuteStatement("+strQRCode+")");
+		System.out.println("ExcecuteStatement("+strQRCode+")");
 		try {
 			dbConnection.setAutoCommit(false);
 			
