@@ -12,9 +12,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.Inet4Address;
 
 public class ConnectRemoteMYSQL {
 
@@ -36,6 +39,8 @@ public class ConnectRemoteMYSQL {
 
 	private static void openConnection()
 	{
+		System.out.print("openConnection: ");
+		
 		dbUrl = "jdbc:mysql://" + dbHost + "/" + dbDatabase;
 		
 		connectionProperties.setProperty("user", dbUser);
@@ -43,7 +48,7 @@ public class ConnectRemoteMYSQL {
 		connectionProperties.setProperty("useSSL", "false");
 		connectionProperties.setProperty("autoReconnect", "false");
 		
-		System.out.println("url: " + dbUrl);
+		System.out.println("dbUrl: " + dbUrl);
 		
 		try{
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
@@ -123,6 +128,36 @@ public class ConnectRemoteMYSQL {
 		
 	}
 	
+	private static void obtainIPInfo()
+	{
+		System.out.print("obtainIPInfo: ");
+		try {
+	        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+	        while (interfaces.hasMoreElements()) {
+	            NetworkInterface iface = interfaces.nextElement();
+	            // filters out 127.0.0.1, inactive interfaces and non IPV4 addresses
+	            if (iface.isLoopback() || !iface.isUp())
+	                continue;
+	            
+	            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+	            while(addresses.hasMoreElements()) {
+	                InetAddress addr = addresses.nextElement();
+	                if (addr instanceof Inet4Address)
+	                {
+	                	clientIP = addr.getHostAddress();
+	    			    clientName = addr.getCanonicalHostName();
+	    				System.out.println("ClientIP/ClientName: " + clientIP + "/" + clientName);	    
+
+	    			    return; // Take the first one
+	                }
+	            }
+	        }
+	    } catch (SocketException e) {
+	        throw new RuntimeException(e);
+	    }
+		
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
@@ -134,19 +169,8 @@ public class ConnectRemoteMYSQL {
 			
 		System.out.println("Commandline: TestMYSQL" + logString);
 		
-		try
-		{
-		    InetAddress addr;
-		    addr = InetAddress.getLocalHost();
-		    clientIP = addr.getHostAddress();
-		    clientName = addr.getHostName();
-		}
-		catch (UnknownHostException ex)
-		{
-		    System.out.println("Hostname can not be resolved");
-		}
-		System.out.println("ClientIP/ClientName: " + clientIP + "/" + clientName);
-
+		obtainIPInfo();
+		
 		openConnection();
 		
 		for (int i=0; i<args.length; i++)
