@@ -80,7 +80,7 @@ public class ConnectRemoteMYSQL {
 			dbConnection.setAutoCommit(false);
 			
 			mysqlStatement = dbConnection.createStatement();
-			mysqlResultSet = mysqlStatement.executeQuery("select amount from QR_CODE where datetime_dispense is NULL and qr_code = " + "'" + strQRCode + "'");
+			mysqlResultSet = mysqlStatement.executeQuery("select amount from QR_CODE where datetime_scan is NULL and qr_code = " + "'" + strQRCode + "'");
 			mysqlResultSet = mysqlStatement.getResultSet();
 
 			String resultAmount = null;
@@ -109,9 +109,10 @@ public class ConnectRemoteMYSQL {
 		    if (resultAmount != null)
 		    {
 		    	PreparedStatement mysqlPreparedStatement;
-		    	mysqlPreparedStatement = dbConnection.prepareStatement("update QR_CODE set client_id = ? , datetime_dispense = ? where datetime_dispense is NULL and qr_code = " + "'" + strQRCode + "'");
+		    	mysqlPreparedStatement = dbConnection.prepareStatement("update QR_CODE set client_ip = ?, client_name = ? , datetime_scan = ? where datetime_scan is NULL and qr_code = " + "'" + strQRCode + "'");
 		    	mysqlPreparedStatement.setString(1,clientIP);
-		    	mysqlPreparedStatement.setString(2,strDate);
+		    	mysqlPreparedStatement.setString(2,clientName);
+		    	mysqlPreparedStatement.setString(3,strDate);
 		    	mysqlCount = mysqlPreparedStatement.executeUpdate();
 		    	
 		    	System.out.println("Number of QR_CODE records updated: " + mysqlCount );
